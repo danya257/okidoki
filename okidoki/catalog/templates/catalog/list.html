@@ -1,0 +1,49 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% block link %}
+<link rel="stylesheet" href="{% static 'main/css/catalog.css' %}">
+{% endblock %}
+{% block title %}
+{% if category %}{{ category.name }}{% else %}Меню{% endif %}
+{% endblock %}
+
+
+{% block body %}
+
+<header class="header">
+    <div class="top">
+        <h3>Категории</h3>
+
+        <nav class="navbar">
+            <button> {% if not category %} {% endif %}
+                <a href="{% url 'catalog:product_list' %}"></a></button>
+            <button><a href="{% url 'catalog:product_list' %}">Все товары</a></button>
+            {% for c in categories %}
+            {% if category.slug == c.slug %} {% endif %}
+            <button><a href="{{ c.get_absolute_url }}">{{ c.name }} </a></button>
+
+            {% endfor %}
+            <h1>{% if category %}{{ category.name }}{% else %}
+                Меню{% endif %}</h1>
+        </nav>
+    </div>
+</header>
+
+    <h1>{% if category %}{{ category.name }}{% else %}
+        Меню{% endif %}</h1>
+<div class="catalog-content">
+
+
+    {% for product in products %}
+
+
+    <div class="chapter">
+        <img width="90%" height="300px"
+             src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'catalog/img/no_image.png' %}{% endif %}"></a>
+        <h1>{{ product.name }}</h1>
+        <p> {{ product.description|linebreaks }}</p>
+        <p>{{ product.price }}₽</p>
+    </div>
+{% endfor %}
+</div>
+{% endblock %}
