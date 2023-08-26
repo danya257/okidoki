@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main.apps.MainConfig',
     'catalog.apps.CatalogConfig',
-    'users.apps.UsersConfig'
+    'users.apps.UsersConfig',
+    'cart',
 ]
 
 MIDDLEWARE = [
