@@ -1,28 +1,49 @@
-const tabsBtn = document.querySelectorAll(".tabs__nav-btn");
-const tabsItems = document.querySelectorAll(".tabs__item");
 
-tabsBtn.forEach(onTabClick)
-    function onTabClick(item) {
-    item.addEventListener("click",function() {
-        let currentBtn = item;
-        let tabId = currentBtn.getAttribute("data-tab");
-        let currentTab = document.querySelector(tabId);
+// Получение модального окна и кнопки для его открытия
+var modal = document.getElementById("modal");
+var btn = document.getElementById("cart-button");
 
-        if ( ! currentBtn.classList.contains('active') ) {
-                  tabsBtn.forEach(function(item){
-            item.classList.remove('active');
-        });
-        
-        tabsItems.forEach(function(item){
-            item.classList.remove('active');
-        });
+// Получение элемента для закрытия модального окна
+var closeBtn = document.getElementsByClassName("close")[0];
 
-        currentBtn.classList.add('active');
-        currentTab.classList.add('active');
-  
+// Открытие модального окна при клике на кнопку
+btn.onclick = function() {
+    modal.style.display = "block";
+    loadCartContent();
+}
+
+// Закрытие модального окна при клике на кнопку "Закрыть"
+closeBtn.onclick = function() {
+    modal.style.display = "none";
+}
+
+// Закрытие модального окна при клике за пределами окна
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
+// Загрузка содержимого корзины с помощью Ajax-запроса
+function loadCartContent() {
+    var request = new XMLHttpRequest();
+    request.open('GET', '/cart/l/', true);
+
+    request.onload = function() {
+        if (request.status >= 200 && request.status < 400) {
+            // Успешно загружено содержимое корзины
+            document.getElementById("cart-content").innerHTML = request.responseText;
+        } else {
+            // Обработка ошибки
+            console.error("Ошибка загрузки корзины");
         }
+    };
 
-    });
-};
+    request.onerror = function() {
+        // Обработка ошибки
+        console.error("Ошибка загрузки корзины");
+    };
 
-document.querySelector('.tabs__nav-btn').click();
+    request.send();
+}
+

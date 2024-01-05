@@ -1,20 +1,22 @@
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from users import views as user_views
 
-
 urlpatterns = [
-    path('admin', admin.site.urls),
+    path('admin/', admin.site.urls),
     path('', include('main.urls')),
+    path('cart/', include('cart.urls')),
+    path('', include('orders.urls',)),
     path('catalog/', include('catalog.urls')),
+    path('api/', include('api.urls')),
     path('register/', user_views.register, name='register'),
-    path('profile/', user_views.profile, name='profile'),
+    path('accounts/profile/', user_views.profile, name='profile'),
     path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
-    
+
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

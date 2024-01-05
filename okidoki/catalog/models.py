@@ -36,7 +36,7 @@ class Modificators(models.Model):
     updated = models.DateTimeField(auto_now=True, verbose_name='Обновлён')
 
     class Meta:
-        ordering = ('name',)
+        ordering = ('id',)
         verbose_name = 'Модификатор'
         verbose_name_plural = 'Модификаторы'
         index_together = (('id', 'slug'),)

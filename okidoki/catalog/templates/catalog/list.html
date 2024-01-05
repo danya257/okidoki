@@ -1,34 +1,60 @@
-{% extends "main/base.html" %} {% load static %} {% block link %}
+{% extends "main/base.html" %}
+{% load static %}
+{% block link %}
 <link rel="stylesheet" href="{% static 'main/css/catalog.css' %}">
-<link rel="stylesheet" href="{% static 'main/css/users.css' %}">{% endblock %} {% block title %} {% if category %}{{ category.name }}{% else %}Меню{% endif %} {% endblock %} {% block body %}
+<link rel="stylesheet" href="{% static 'main/css/users.css' %}">
+{% endblock %}
+{% block title %} {% if category %}{{ category.name }}{% else %}Меню{% endif %} {% endblock %}
+{% block body %}
 
-<header class="header">
+<div class="header2">
     <div class="top">
 
         <nav class="navbar">
 
             {% for c in categories %} {% if category.slug == c.slug %} {% endif %}
-            </br><button><a href="{{ c.get_absolute_url }}">{{ c.name }} </a></button> {% endfor %}
+            </br>
+            <button><a href="{{ c.get_absolute_url }}">{{ c.name }} </a></button>
+            {% endfor %}
 
         </nav>
     </div>
-</header>
-
-
-
-<div class="catalog-content">
-    <div class="catalog-content">
-        <h1>{% if category %}{{ category.name }}{% else %} Меню{% endif %}</h1>
-    </div>
-    {% for product in products %}
-
-
-    <div class="chapter">
-        <img width="90%" height="300px" src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'catalog/img/no_image.png' %}{% endif %}"></a>
-        <h1>{{ product.name }}</h1>
-        <p> {{ product.description|linebreaks }}</p>
-        <button class="login"><p> В корзину:{{ product.price }}₽</p></button>
-    </div>
-    {% endfor %}
 </div>
+
+        <h1>{% if category %}{{ category.name }}{% else %}
+            Меню{% endif %}</h1>
+<div class="catalog-content">
+    {% for product in products %}
+      <div class="chapter">
+        <a href="#" onclick="openModal('{{ product.get_absolute_url }}'); return false;">
+          <img class="catalog-img" src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'main/img/Logo.png' %}{% endif %}">
+        </a>
+        <h1>{{ product.name }}</h1>
+        <p>Состав: {{ product.description|linebreaks }}</p>
+          <div><form class="add-to-cart-form" method="POST" data-url="{% url 'cart:cart_add' product.id %}">
+            {{ cart_product_form }}
+            {% csrf_token %}
+            <input class="in_cart" type="submit" value=" В корзину:{{ product.price }}₽">
+        </form> </div>
+
+      </div>
+    {% endfor %}
+  </div>
+  
+  <div id="modal_detail">
+    <div id="modal-content"></div>
+    <span id="modal-close" onclick="closeModal()">&times;</span>
+  </div>
+  <script src="/static/main/js/detail.js"></script>
+
+</div>
+
 {% endblock %}
+{% block js %}
+
+<script src="/static/main/js/app.js"></script>
+<script src="/static/main/js/cart.js"></script>
+<script src="/static/main/js/detail.js"></script>
+
+{% endblock %}
+

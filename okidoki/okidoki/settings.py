@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+os.environ['DJANGO_SETTINGS_MODULE'] = 'okidoki.settings'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -33,6 +35,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
+    'crispy_forms',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -40,7 +43,13 @@ INSTALLED_APPS = [
     'main.apps.MainConfig',
     'catalog.apps.CatalogConfig',
     'users.apps.UsersConfig',
-    'cart',
+    'cart.apps.CartConfig',
+    'orders.apps.OrdersConfig',
+    'celery',
+    'api',
+    'rest_framework',
+
+
 ]
 
 MIDDLEWARE = [
@@ -70,9 +79,28 @@ TEMPLATES = [
         },
     },
 ]
+REST_FRAMEWORK = {
 
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
+
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 10,
+
+}
+CORS_ALLOW_METHODS = (
+    'GET',
+    'POST',
+    'PUT',
+    'PATCH',
+    'DELETE',
+    'OPTIONS',
+)
 WSGI_APPLICATION = 'okidoki.wsgi.application'
 
+
+CELERY_BROKER_URL = 'amqp://localhost:5672/'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -125,3 +153,13 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+LOGIN_URL = 'admin'
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CART_SESSION_ID = 'cart'
+DEFAULT_FROM_EMAIL = 'zakazovtest@gmail.com'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'zakazovtest@gmail.com'
+EMAIL_HOST_PASSWORD = 'yltyqyymzaplzxbq'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
