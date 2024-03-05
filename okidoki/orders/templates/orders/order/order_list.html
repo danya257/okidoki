@@ -1,0 +1,29 @@
+{% extends "main/base.html" %} {% load static %} {% block link %}
+<link rel="stylesheet" href="{% static 'main/css/catalog.css' %}">
+<link rel="stylesheet"
+      href="{% static 'main/css/users.css' %}">{% endblock %} 
+{% block title %} Заказы{% endblock %}
+
+{% block body %}
+         <h1>Список ваших заказов</h1>
+    <ul>
+        {% for order in orders %}
+            <li>
+                <strong>Заказ №{{ order.id }}</strong><br>
+                Имя: {{ order.name }}<br>
+                Номер телефона: {{ order.phone_number }}<br>
+                Адрес: {{ order.address }}<br>
+                Способ доставки: {{ order.get_delivery_display }}<br>
+                Способ оплаты: {{ order.get_pal_display }}<br>
+                Дата создания: {{ order.created }}<br>
+                {% if order.paid %}
+                    <span style="color: green;">Оплачен</span><br>
+                {% else %}
+                    <span style="color: red;">Не оплачен</span><br>
+                {% endif %}
+                <a href="{% url 'orders:repeat_order' order.id %}">Повторить заказ</a>  <!-- Ссылка на повторение заказа -->
+            </li>
+            <hr>
+        {% endfor %}
+    </ul>
+{% endblock %}

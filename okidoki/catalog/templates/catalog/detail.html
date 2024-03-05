@@ -1,4 +1,3 @@
-
 {% load static %}
 
 {% block link %}
@@ -6,27 +5,83 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <link rel="stylesheet" href="{% static 'main/css/users.css' %}">
 {% endblock %}
+
 {% block title %}
-{% if category %}{{ category.title }}{% else %}Products{% endif %}
+{% if category %}
+    {{ category.title }}
+{% else %}
+    Products
+{% endif %}
 {% endblock %}
 
-
 {% block body %}
-      <div class="chapter">
-          <img class="catalog-img" src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'main/img/Logo.png' %}{% endif %}">
-        <h1>{{ product.name }}</h1>
-        <p>Состав: {{ product.description|linebreaks }}</p>
-        <form class="add-to-cart-form" method="POST" data-url="{% url 'cart:cart_add' product.id %}">
-            {{ cart_product_form }}
-            {% csrf_token %}
-            <input class="login" type="submit" value=" В корзину:{{ product.price }}₽">
-        </form>
-      </div>
+<div class="catalog-content">
+    <div class="catalog-content">
+         <img width="90%" height="300px" src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'main/img/Logo.png' %}{% endif %}">
+    <h1>{{ product.name }}</h1>
+    <p>Состав: {{ product.description|linebreaks }}</p>
+    {% if product.modifier_groups.all %}
+        <h2>Модификаторы:</h2>
+        <ul>
+            {% for modifier_group in product.modifier_groups.all %}
+                <li>{{ modifier_group.name }}</li>
+                <ul>
+                    {% for modifier in modifier_group.modificators_set.all %}
+                        <li>{{ modifier.name }} - Цена: {{ modifier.price }}</li>
+                    {% endfor %}
+                </ul>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <form class="add-to-cart-form" method="POST" data-url="{% url 'cart:cart_add' product.id %}">
+        {{ cart_product_form }}
+        {% csrf_token %}
+        <input class="login" type="submit" value=" В корзину:{{ product.price }}₽" onclick="openModal('{{ product.get_absolute_url }}')">
+    </form>
+</div>
+
+<div id="modal_detail" class="modal">
+    <div id="modal-content" class="modal-content"></div>
+    <span class="close" onclick="closeModal()">&times;</span>
+    </div>
+
+</div>
 {% endblock %}
 
 {% block js %}
+<script src="{% static 'main/js/app.js' %}"></script>
+<script src="{% static 'main/js/cart.js' %}"></script>
+<script>
+    function openModal(url) {
+        var modal = document.getElementById("modal_detail");
+        var modalContent = document.getElementById("modal-content");
 
-<script src="/static/main/js/app.js"></script>
-<script src="/static/main/js/cart.js"></script>
+        if (!modal || !modalContent) {
+            console.error("Modal elements not found!");
+            return;
+        }
 
+        if (modal.style.display !== "block") {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    modalContent.innerHTML = xhr.responseText;
+                    modal.style.display = "block";
+                }
+            };
+            xhr.open("GET", url, true);
+            xhr.send();
+        }
+    }
+
+    function closeModal() {
+        var modal = document.getElementById("modal_detail");
+
+        if (modal && modal.style.display === "block") {
+            modal.style.display = "none";
+        } else {
+            console.error("Modal element not found or already hidden!");
+        }
+    }
+</script>
 {% endblock %}

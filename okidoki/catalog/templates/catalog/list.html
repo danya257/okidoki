@@ -12,7 +12,8 @@
 
         <nav class="navbar">
 
-            {% for c in categories %} {% if category.slug == c.slug %} {% endif %}
+            {% for c in categories %}
+            {% if category.slug == c.slug %} {% endif %}
             </br>
             <button><a href="{{ c.get_absolute_url }}">{{ c.name }} </a></button>
             {% endfor %}
@@ -21,40 +22,55 @@
     </div>
 </div>
 
-        <h1>{% if category %}{{ category.name }}{% else %}
-            Меню{% endif %}</h1>
+<h1>{% if category %}{{ category.name }}{% else %}Меню{% endif %}</h1>
 <div class="catalog-content">
     {% for product in products %}
-      <div class="chapter">
-        <a href="#" onclick="openModal('{{ product.get_absolute_url }}'); return false;">
-          <img class="catalog-img" src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'main/img/Logo.png' %}{% endif %}">
-        </a>
-        <h1>{{ product.name }}</h1>
-        <p>Состав: {{ product.description|linebreaks }}</p>
-          <div><form class="add-to-cart-form" method="POST" data-url="{% url 'cart:cart_add' product.id %}">
-            {{ cart_product_form }}
-            {% csrf_token %}
-            <input class="in_cart" type="submit" value=" В корзину:{{ product.price }}₽">
-        </form> </div>
+    <div class="chapter">
+        <div class="productImg">
+            <a href="#" onclick="openModal('{{ product.get_absolute_url }}'); return false;">
+                <img class="catalog-img"
+                     src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'main/img/Logo.png' %}{% endif %}">
+            </a>
+        </div>
+        <div class="productDescription">
+            <h1>{{ product.name }}</h1>
+            <p> {{ product.description|linebreaks }}</p>
+        </div>
+        <div class="modificators">
+            {% if product.modifier_groups.all %}
+            <h2>Дополнительно:</h2>
 
-      </div>
+                <ul>
+                    {% for modifier in modifier_group.modificators_set.all %}
+                    <li>{{ modifier.name }}  <p>-Цена: {{modifier.price}}</p></li>
+                    {% endfor %}
+            {% endif %}
+        </div>
+        <div class="price">
+            <form class="add-to-cart-form" method="POST" data-url="{% url 'cart:cart_add' product.id %}">
+                {{ cart_product_form }}
+                {% csrf_token %}
+                <input class="in_cart" type="submit" value=" В корзину: {{ product.price }}₽">
+            </form>
+        </div>
+    </div>
     {% endfor %}
-  </div>
-  
-  <div id="modal_detail">
+</div>
+
+
+<div id="modal_detail">
     <div id="modal-content"></div>
     <span id="modal-close" onclick="closeModal()">&times;</span>
-  </div>
-  <script src="/static/main/js/detail.js"></script>
+</div>
+<script src="{% static 'main/js/detail.js' %}"></script>
 
 </div>
 
 {% endblock %}
 {% block js %}
 
-<script src="/static/main/js/app.js"></script>
-<script src="/static/main/js/cart.js"></script>
-<script src="/static/main/js/detail.js"></script>
+<script src="{% static 'main/js/app.js' %}"></script>
+<script src="{% static 'main/js/cart.js' %}"></script>
+<script src="{% static 'main/js/detail.js' %}"></script>
 
 {% endblock %}
-

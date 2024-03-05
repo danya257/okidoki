@@ -4,6 +4,10 @@ from django.contrib.auth.forms import UserCreationForm
 
 
 class UserRegisterForm(UserCreationForm):
+    username = forms.CharField(max_length=65, label='Номер телефона')
+
+    password1 = forms.CharField(max_length=65, label='Пароль')
+    password2 = forms.CharField(max_length=65, label='Подтверждение пароля')
 
     class Meta:
         model = User
@@ -11,5 +15,5 @@ class UserRegisterForm(UserCreationForm):
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField(max_length=65)
-    password = forms.CharField(max_length=65, widget=forms.PasswordInput)
+    username = forms.CharField(max_length=65, label='Номер телефона')
+    password = forms.CharField(max_length=65, label='Имя')

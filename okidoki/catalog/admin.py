@@ -2,9 +2,9 @@ from django.contrib import admin
 from .models import *
 
 
-# Register your models here.
+
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['name', 'slug']
+    list_display = ['name', 'slug', 'range']
     prepopulated_fields = {'slug': ('name',)}
 
 
@@ -12,10 +12,9 @@ admin.site.register(Category, CategoryAdmin)
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['name', 'slug', 'price',  'available', 'created',
-                    'updated', ]
-    list_filter = ['available', 'created', 'updated']
-    list_editable = ['price',  'available']
+    list_display = ['name', 'price', 'available', 'range']
+    list_filter = ['available', 'range']
+    list_editable = ['price', 'available']
     prepopulated_fields = {'slug': ('name',)}
 
 
@@ -31,10 +30,9 @@ admin.site.register(CatMod, CatModAdmin)
 
 
 class ModificatorsAdmin(admin.ModelAdmin):
-    list_display = ['name', 'slug', 'price',  'available', 'created',
-                    'updated']
-    list_filter = ['available', 'created', 'updated']
-    list_editable = ['price',  'available']
+    list_display = ['name', 'slug', 'price', 'available', ]
+    list_filter = ['available', ]
+    list_editable = ['price', 'available']
     prepopulated_fields = {'slug': ('name',)}
 
 

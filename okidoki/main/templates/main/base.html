@@ -22,14 +22,9 @@
 
 </head>
 
+
 <body>
-    {% if messages %}
-        	{% for message in messages %}
-          	<div class="alert alert-{{ message.tags }}">
-            	{{ message }}
-          	</div>
-        	{% endfor %}
-{% endif %}
+
     <div class="top-header">
         <a href="{% url 'catalog:product_list' %}"><button class="but_log">Меню</button></a>
         <a href="/"><button class="but_log">О нас</button></a>
@@ -63,6 +58,22 @@
     </div>
 </header>
 
+<!-- Button to open the modal -->
+<button onclick="openModal()">Open Modal</button>
+
+<!-- The Modal -->
+<div id="areaModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close" onclick="closeModalArea()">&times;</span>
+    <ul>
+
+      {% for area in areas %}
+        <li>{{ area.name }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
 
 {% block body %}
 
@@ -73,6 +84,8 @@
 {% block js %}
 <script src="/static/main/js/app.js"></script>
 <script src="/static/main/js/cart.js"></script>
+<script src="/static/main/js/area.js"></script>
+
 
 {% endblock %}
 </body>

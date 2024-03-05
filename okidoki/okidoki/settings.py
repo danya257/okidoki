@@ -45,9 +45,9 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'cart.apps.CartConfig',
     'orders.apps.OrdersConfig',
-    'celery',
     'api',
     'rest_framework',
+    'area',
 
 
 ]
@@ -153,7 +153,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-LOGIN_URL = 'admin'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 CART_SESSION_ID = 'cart'
 DEFAULT_FROM_EMAIL = 'zakazovtest@gmail.com'
